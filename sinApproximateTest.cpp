@@ -5,7 +5,6 @@
 #include <time.h>
 #include <math.h>
 
-
 constexpr auto doubleTwoPI = 6.28318530718;
 constexpr auto doublePI =    3.14159265359;
 constexpr auto doubleHalfPI = 1.57079632679;
@@ -15,7 +14,7 @@ constexpr auto epsillon = 0.00001;
 
 
 double getSin(const double x) {
-	/*
+	
 	if (x < 0)
 		return -getSin(x);
 	if (x <= 0.236872109056403)
@@ -26,7 +25,7 @@ double getSin(const double x) {
 		return (-1) * getSin(x - doublePI);
 	if (x > doubleHalfPI)
 		return getSin(doublePI - x);
-		*/
+		
 	if (x < 0.591385707016756)
 		return -0.1 * x * (x - doublePI) * (x + doublePI);
 	if (x < 0.801774927340932)
@@ -37,15 +36,17 @@ double getSin(const double x) {
 }
 
 
-void test()
+void testTime()
 {
 	
+	const double testTo = doubleHalfPI;
+
 	clock_t start, end;
 	double result;
 
 	start = clock();
 
-	for (double i = 0.0; i < doubleHalfPI; i += epsillon)
+	for (double i = 0.0; i < testTo; i += epsillon)
 	{
 		getSin(i);
 	}
@@ -57,7 +58,7 @@ void test()
 
 	start = clock();
 
-	for (double i = 0.0; i < doubleHalfPI; i += epsillon)
+	for (double i = 0.0; i < testTo; i += epsillon)
 	{
 		sin(i);
 	}
@@ -69,11 +70,28 @@ void test()
 }
 
 
+void testErr()
+{
+
+	double e, max = 0.0;
+	const double testTo = doublePI;
+
+	for (double i = 0.0; i < testTo; i += epsillon)
+	{
+		e = fabs( 1 - (getSin(i) / sin(i)) );
+		max = (e > max) ? e : max;
+	
+	}
+
+	std::cout << max << std::endl;
+}
+
+
 
 int main()
 {
 
-	test();
+	testErr();
 	return 0;
 
 }
