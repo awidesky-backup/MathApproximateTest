@@ -35,6 +35,42 @@ double getSin(const double x) {
 
 }
 
+double getTaylorSin(const double x) {
+
+	if (x < 0)
+		return -getTaylorSin(x);
+	if (x > doubleTwoPI)                           //ask JVM to do modulus with double : no problem! :D
+		return getTaylorSin(std::fmod(x, doubleTwoPI));  //ask C++ compiler to do modulus with double : F you I refuse to calculate &$^%&#$%@$&
+	if (x > doublePI)
+		return (-1) * getSin(x - doublePI);
+	if (x > doubleHalfPI)
+		return getTaylorSin(doublePI - x);
+
+	int sign = -1;
+	double divisor = 1;
+	int i = 1;
+	double num = 0;
+	double dividend = x;
+	double result = dividend;
+
+	do {
+
+		dividend = dividend * x * x * sign;
+
+		i += 1;
+		divisor *= i;
+		i += 1;
+		divisor *= i;
+
+		num = dividend / divisor;
+
+		result += num;
+
+	} while (num >= epsillon);
+
+	return result;
+
+}
 
 void testTime()
 {
@@ -78,7 +114,7 @@ void testErr()
 
 	for (double i = 0.0; i < testTo; i += epsillon)
 	{
-		e = fabs( 1 - (getSin(i) / sin(i)) );
+		e = fabs( 1 - (getTaylorSin(i) / sin(i)) );
 		max = (e > max) ? e : max;
 	
 	}
