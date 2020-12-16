@@ -2,10 +2,80 @@
 //dfd
 
 #include <iostream>
+#include <time.h>
+#include <math.h>
+
+
+constexpr auto doubleTwoPI = 6.28318530718;
+constexpr auto doublePI =    3.14159265359;
+constexpr auto doubleHalfPI = 1.57079632679;
+constexpr auto  a1Double = -0.467;
+constexpr auto  a2Double = -0.4846785;
+constexpr auto epsillon = 0.00001;
+
+
+double getSin(const double x) {
+	/*
+	if (x < 0)
+		return -getSin(x);
+	if (x <= 0.236872109056403)
+		return x;
+	if (x > doubleTwoPI)                           //ask JVM to do modulus with double : no problem! :D
+		return getSin(std::fmod(x, doubleTwoPI));  //ask C++ compiler to do modulus with double : F you I refuse to calculate &$^%&#$%@$&
+	if (x > doublePI)
+		return (-1) * getSin(x - doublePI);
+	if (x > doubleHalfPI)
+		return getSin(doublePI - x);
+		*/
+	if (x < 0.591385707016756)
+		return -0.1 * x * (x - doublePI) * (x + doublePI);
+	if (x < 0.801774927340932)
+		return a1Double * ((x - doubleHalfPI) * (x - doubleHalfPI)) + 1;
+		
+	return a2Double * ((x - doubleHalfPI) * (x - doubleHalfPI)) + 1;
+
+}
+
+
+void test()
+{
+	
+	clock_t start, end;
+	double result;
+
+	start = clock();
+
+	for (double i = 0.0; i < doubleHalfPI; i += epsillon)
+	{
+		getSin(i);
+	}
+
+	end = clock();
+	result = (double) (end - start);
+	std::cout << "result : " << result << " ms in approx" << std::endl;
+
+
+	start = clock();
+
+	for (double i = 0.0; i < doubleHalfPI; i += epsillon)
+	{
+		sin(i);
+	}
+
+	end = clock();
+	result = (double)(end - start);
+	std::cout << "result : " << result << " ms in library" << std::endl;
+
+}
+
+
 
 int main()
 {
-    std::cout << "Hello World!\n";
+
+	test();
+	return 0;
+
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
