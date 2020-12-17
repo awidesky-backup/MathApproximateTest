@@ -66,7 +66,7 @@ double getTaylorSin(const double x) {
 
 		result += num;
 
-	} while (num >= epsillon);
+	} while (num > 0.0);
 
 	return result;
 
@@ -96,12 +96,12 @@ void testTime()
 
 	for (double i = 0.0; i < testTo; i += epsillon)
 	{
-		sin(i);
+		getTaylorSin(i);
 	}
 
 	end = clock();
 	result = (double)(end - start);
-	std::cout << "result : " << result << " ms in library" << std::endl;
+	std::cout << "result : " << result << " ms in Taylor" << std::endl;
 
 }
 
@@ -109,17 +109,18 @@ void testTime()
 void testErr()
 {
 
-	double e, max = 0.0;
+	double e, x, max = 0.0;
 	const double testTo = doublePI;
 
 	for (double i = 0.0; i < testTo; i += epsillon)
 	{
-		e = fabs( 1 - (getTaylorSin(i) / sin(i)) );
-		max = (e > max) ? e : max;
-	
+		e = fabs( 1 - (getSin(i) / sin(i)) );
+		//max = (e > max) ? e : max;
+		if (e > max) { max = e; x = i; }
 	}
 
-	std::cout << max << std::endl;
+	std::cout << max << "\n" << x << std::endl; //in Taylor, result is 0.0751669 \n 1.5708
+	                                            //in approx, result is 0.00982811 \n 2.55021
 }
 
 
@@ -127,7 +128,7 @@ void testErr()
 int main()
 {
 
-	testErr();
+	testTime();
 	return 0;
 
 }
